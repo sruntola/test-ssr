@@ -1,11 +1,21 @@
 {
   "version": 2,
-  "functions": {
-    "api/index.ts": {
-      "runtime": "nodejs20.x"
-    }
-  },
-  "routes": [
-    { "src": "/.*", "dest": "/api/index.ts" }
-  ]
+    "builds": [
+        {
+        "src": "dist/myserverside/server/server.mjs",
+        "use": "@vercel/node",
+        "config": {
+            "includeFiles": [
+            "dist/myserverside/server/**/*"
+            ]
+        }
+        }
+    ],
+    "routes": [
+        {
+        "src": "/(.*)",
+        "dest": "dist/myserverside/server/server.mjs"
+        }   
+    ]
+ 
 }
