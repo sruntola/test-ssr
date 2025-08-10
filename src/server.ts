@@ -32,19 +32,31 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
-  }),
+  })
 );
 
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use((req, res, next) => {
-  angularApp
-    .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
-    .catch(next);
+// app.use((req, res, next) => {
+//   angularApp
+//     .handle(req)
+//     .then((response) =>
+//       response ? writeResponseToNodeResponse(response, res) : next(),
+//     )
+//     .catch(next);
+// });
+app.use(async (req, res, next) => {
+  try {
+    const response = await angularApp.handle(req);
+    if (response) {
+      writeResponseToNodeResponse(response, res);
+    } else {
+      res.status(404).send('Page Not Found');
+    }
+  } catch (err) {
+    next(err);
+  }
 });
 
 /**
